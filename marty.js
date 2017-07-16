@@ -90,7 +90,7 @@ function Marty(IP, name){
     }
     this.parent.sensors[thisSensor].value = buf[0];
     this.parent.sensors[thisSensor].lastRead = Date.now();
-    update(thisSensor, buf[0]);
+    //update(thisSensor, buf[0]);
 
   }
 
@@ -154,7 +154,7 @@ function Marty(IP, name){
   }
 
   this.walk = function(steps, turn, move_time, step_length, side){
-    if (side === undefined){side = direction["any"];}
+    if (side === undefined){side = this.direction["any"];}
     var cmd1 = new Uint16Array([move_time]);
     var cmd1a = new Uint8Array(cmd1.buffer);
     var cmd0 = new Uint8Array([0x02, 0x07, 0x00, 0x03, steps, turn]);
