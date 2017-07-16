@@ -79,16 +79,21 @@ function Marty(IP, name){
     this.requests.shift();
     var buf;
     switch (this.parent.sensors[thisSensor].type){
+      case "chatter":
+        var chatter = new Uint8Array(event.data);
+        this.parent.sensors[thisSensor].value = String.fromCharCode.apply(null, chatter.slice(4, chatter.length));
+        break;
       case "motorPosition":
       case "enabled":
         buf = new Int8Array(event.data);
+        this.parent.sensors[thisSensor].value = buf[0];
         break;
       case "gpio":
       default:
         buf = new Float32Array(event.data);
+        this.parent.sensors[thisSensor].value = buf[0];
         break;
     }
-    this.parent.sensors[thisSensor].value = buf[0];
     this.parent.sensors[thisSensor].lastRead = Date.now();
     //update(thisSensor, buf[0]);
 
@@ -97,6 +102,8 @@ function Marty(IP, name){
   this.socket.onopen = function () {
     this.parent.enable_safeties();
     this.parent.lifelike_behaviours(true);
+    this.parent.get_firmware_version();
+    this.parent.get_sensor("chatter");
     //sensorInt = setInterval(update_sensors, 100);
     this.parent.sensorInt = setInterval(this.parent.update_sensors, 100, this.parent);
   };
@@ -118,6 +125,7 @@ function Marty(IP, name){
   // request_sensor sends out a socket request to get data for the specified sensor
   // the returned value will be handled by the socket receive function and stored in the sensor array
   this.request_sensor = function(sensorName){
+    console.log("sending request for: " + sensorName);
     this.socket.requests.push(sensorName);
     this.socket.send(sensorName);
   }
@@ -130,7 +138,6 @@ function Marty(IP, name){
     if (this.sensors[sensorName].lastRead + 200 > Date.now()){
       return this.sensors[sensorName].value;
     } else {
-      this.request_sensor(sensorName);
       return null;
     }
   }
