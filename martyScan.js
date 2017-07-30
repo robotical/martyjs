@@ -22,11 +22,12 @@ function sendRequest(requestIp, martylist) {
             }
 
         },
+        cache: false,
         error:function(jqXHR, textStatus, errorThrown) {
             // Nothing there
             //$('#response').append("[ ] " + requestIp + "<br/>");
         },
-        timeout:5000 // we want to give the ESP a fair chance of replying
+        timeout:10000 // we want to give the ESP a fair chance of replying
     });
 }
 

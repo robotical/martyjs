@@ -101,7 +101,7 @@ function Marty(IP, name){
 
   this.socket.onopen = function () {
     this.parent.enable_safeties();
-    this.parent.lifelike_behaviours(true);
+    //this.parent.lifelike_behaviours(true);
     this.parent.get_firmware_version();
     this.parent.get_sensor("chatter");
     //sensorInt = setInterval(update_sensors, 100);
@@ -186,7 +186,7 @@ function Marty(IP, name){
   }
 
   this.celebrate = function(move_time){
-    var cmd1 = new Uint16Aray([move_time]);
+    var cmd1 = new Uint16Array([move_time]);
     var cmd1a = new Uint8Array(cmd1.buffer);
     var cmd0 = new Uint8Array([0x02, 0x03, 0x00, 0x08]);
     var cmd = new Uint8Array(cmd0.length + cmd1a.length);
