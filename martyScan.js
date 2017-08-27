@@ -3,7 +3,9 @@
 // The magic command "AA" is used to filter out other web servers which may reply with
 // HTTP 200 codes (404's are handled by the error function).
 
-function sendRequest(requestIp, martylist) {
+
+function sendRequest(requestIp, martylist, timeout) {
+    if (timeout === undefined) timeout = 10000;
     $.ajax({
         type:'GET',
         url:"http://" + requestIp + "/service-discovery", 
@@ -20,21 +22,31 @@ function sendRequest(requestIp, martylist) {
             } else {
                 //$('#response').append('<span class="text-danger">[-] ' + requestIp + '</span><br/>');
             }
+            if (typeof scanResults === "number"){
+                scanResults++;
+            }
 
         },
         cache: false,
         error:function(jqXHR, textStatus, errorThrown) {
             // Nothing there
             //$('#response').append("[ ] " + requestIp + "<br/>");
+            if (typeof scanResults === "number"){
+                scanResults++;
+            }
         },
-        timeout:10000 // we want to give the ESP a fair chance of replying
+        timeout: timeout // we want to give the ESP a fair chance of replying
     });
 }
 
-function scanRange(ip, martylist) {
-    $('#response').empty()
+function scanRange(ip, martylist, timeout) {
+    if (timeout === undefined) timeout = 10000;
+    //$('#response').empty()
     //var ip = document.getElementById("ip").value;
-    for (i = 1; i < 255; i++) {
-        sendRequest(ip + "." + i, martylist);
+    if (typeof scanResults === "number"){
+        scanResults=0;
+    }
+    for (i = 0; i <= 255; i++) {
+        sendRequest(ip + "." + i, martylist, timeout);
     }             
 }
