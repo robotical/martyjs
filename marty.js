@@ -17,18 +17,22 @@
 
 // sensor request array
 var req = new Object();
+(function() {
 req["battery"] = new Uint8Array([0x01, 0x01, 0x00]);
-for (let i=0; i<3; i++) {req["acc"+i] = new Uint8Array([0x01, 0x02, i]);}
-for (let i=0; i<8; i++) {req["mc"+i] = new Uint8Array([0x01, 0x03, i]);}
-for (let i=0; i<8; i++) {req["gpio"+i] = new Uint8Array([0x01, 0x04, i]);}
-for (let i=0; i<9; i++) {req["mp"+i] = new Uint8Array([0x01, 0x06, i]);}
-for (let i=0; i<9; i++) {req["enabled"+i] = new Uint8Array([0x01, 0x07, i]);}
-req["chatter"] = new Uint8Array([0x01, 0x05, 0x00]);
+  var i=0;
+  for (i=0; i<3; i++) {req["acc"+i] = new Uint8Array([0x01, 0x02, i]);}
+  for (i=0; i<8; i++) {req["mc"+i] = new Uint8Array([0x01, 0x03, i]);}
+  for (i=0; i<8; i++) {req["gpio"+i] = new Uint8Array([0x01, 0x04, i]);}
+  for (i=0; i<9; i++) {req["mp"+i] = new Uint8Array([0x01, 0x06, i]);}
+  for (i=0; i<9; i++) {req["enabled"+i] = new Uint8Array([0x01, 0x07, i]);}
+  req["chatter"] = new Uint8Array([0x01, 0x05, 0x00]);
+})();
 var sensorInt;
 
 function Marty(IP, name){
   this.ip = IP;
   this.name = name;
+  var i=0;
 
   // codes
   this.direction = [];
@@ -45,22 +49,22 @@ function Marty(IP, name){
   this.sensors["acc1"] = new Sensor("acc1", "acc");
   this.sensors["acc2"] = new Sensor("acc2", "acc");
   // GPIOs
-  for (let i=0; i<8; i++){
+  for (i=0; i<8; i++){
     var sname = "gpio" + i;
     this.sensors[sname] = new Sensor(sname, "gpio");
   }
   // motor current
-  for (let i=0; i<8; i++){
+  for (i=0; i<8; i++){
     var sname = "mc" + i;
     this.sensors[sname] = new Sensor(sname, "motorCurrent");
   }
   // Motor Enabled bools
-  for (let i=0; i<9; i++){
+  for (i=0; i<9; i++){
     var sname = "enabled" + i;
     this.sensors[sname] = new Sensor(sname, "enabled");
   }
   // motor position
-  for (let i=0; i<9; i++){
+  for (i=0; i<9; i++){
     var sname = "mp" + i;
     this.sensors[sname] = new Sensor(sname, "motorPosition");
   }
@@ -161,7 +165,7 @@ function Marty(IP, name){
   }
 
   this.walk = function(steps, turn, move_time, step_length, side){
-    if (side === undefined){side = this.direction["any"];}
+    if (side === undefined){side = "any";}
     var cmd1 = new Uint16Array([move_time]);
     var cmd1a = new Uint8Array(cmd1.buffer);
     var cmd0 = new Uint8Array([0x02, 0x07, 0x00, 0x03, steps, turn]);
