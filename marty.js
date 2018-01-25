@@ -26,6 +26,7 @@ req["battery"] = new Uint8Array([0x01, 0x01, 0x00]);
   for (i=0; i<9; i++) {req["mp"+i] = new Uint8Array([0x01, 0x06, i]);}
   for (i=0; i<9; i++) {req["enabled"+i] = new Uint8Array([0x01, 0x07, i]);}
   req["chatter"] = new Uint8Array([0x01, 0x05, 0x00]);
+  req["prox"] = new Uint8Array([0x01, 0x08, 0x00]);
 })();
 var sensorInt;
 
@@ -69,6 +70,7 @@ function Marty(IP, name){
     this.sensors[sname] = new Sensor(sname, "motorPosition");
   }
   this.sensors["chatter"] = new Sensor("chatter", "chatter");
+  this.sensors["prox"] = new Sensor("prox", "prox");
 
   // websocket stuff
   // TODO: generalise to allow other connection types - e.g. i2c for microbit
