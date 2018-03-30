@@ -356,6 +356,11 @@ function Marty(IP, name){
   this.save_calibration = function(){
    this.socket.send(new Uint8Array([0x02, 0x01, 0x00, 0xFF]));  
   }  
+
+  // be careful with this function. It will take your Marty off the network and start it broadcasting a setup network again.
+  this.reset_wifi = function(){
+    this.socket.send(new Uint8Array([0x04, 0xFE, 0xFE]));
+  }
 }
 
 function Sensor(name, type){
