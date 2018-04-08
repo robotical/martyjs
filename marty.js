@@ -345,6 +345,39 @@ function Marty(IP, name){
     this.socket.send(new Uint8Array([0x02, 0x03, 0x00, 0x1F, 0x00, amount]));
   }
 
+  this.set_servo_mult = function(servo_id, new_mult){
+    var cmd1 = new Float32Array([new_mult]);
+    var cmd1a = new Uint8Array(cmd1.buffer);
+    var cmd0 = new Uint8Array([0x02, 0x07, 0x00, 0x1F, 0x05, servo_id]);
+    var cmd = new Uint8Array(cmd0.length + cmd1a.length);
+    cmd.set(cmd0);
+    cmd.set(cmd1a, cmd0.length);
+    console.log(cmd);
+    this.socket.send(cmd);    
+  }
+
+  this.set_servo_buzz_min = function(servo_id, new_value){
+    var cmd1 = new Float32Array([new_value]);
+    var cmd1a = new Uint8Array(cmd1.buffer);
+    var cmd0 = new Uint8Array([0x02, 0x07, 0x00, 0x1F, 0x06, servo_id]);
+    var cmd = new Uint8Array(cmd0.length + cmd1a.length);
+    cmd.set(cmd0);
+    cmd.set(cmd1a, cmd0.length);
+    console.log(cmd);
+    this.socket.send(cmd);    
+  }
+
+  this.set_servo_buzz_max = function(servo_id, new_value){
+    var cmd1 = new Float32Array([new_value]);
+    var cmd1a = new Uint8Array(cmd1.buffer);
+    var cmd0 = new Uint8Array([0x02, 0x07, 0x00, 0x1F, 0x07, servo_id]);
+    var cmd = new Uint8Array(cmd0.length + cmd1a.length);
+    cmd.set(cmd0);
+    cmd.set(cmd1a, cmd0.length);
+    console.log(cmd);
+    this.socket.send(cmd);    
+  }
+
   this.get_firmware_version = function(){
     this.socket.send(new Uint8Array([0x02, 0x01, 0x00, 0x20]));
   }
