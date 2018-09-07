@@ -79,7 +79,10 @@ function Marty(IP, name){
   this.socket.requests = [];
   this.socket.parent = this;
 
-
+    this.jointNames = ['Left hip', 'Left twist', 'Left knee',
+                       'Right hip', 'Right twist', 'Right knee',
+                       'Left arm', 'Right arm', 'Eyes'];
+    
   this.socket.onmessage = function (event){
     var thisSensor = this.requests[0];
     this.requests.shift();
@@ -394,6 +397,41 @@ function Marty(IP, name){
   this.reset_wifi = function(){
     this.socket.send(new Uint8Array([0x04, 0xFE, 0xFE]));
   }
+
+
+    this.disabledCallbacks = [];
+
+    this.get_disables = function(){
+        var evt = {
+            "time": new Date(),
+            "disables": []
+        };
+        for (i=0; i<9; i++){
+            var enabled = this.get_sensor("enabled" + i);
+            if (enabled == false){
+                evt["disables"].push(i);
+            }
+        }
+        return evt;
+    }
+
+    this.motorWatchdog = function(interval=1000){
+        return setInterval((function(self){
+            return function(){
+                var evt = self.get_disables();
+                if (evt["disables"].length > 0){
+                    for (var i = 0; i < self.disabledCallbacks.length; i++){
+                        /* Call callbacks with event */
+                        self.disabledCallbacks[i](evt);
+                    }
+                }
+            }
+        })(this), interval);
+    }
+
+    this.addMotorDisabledCallback = function(callback){
+        this.disabledCallbacks.push(callback);
+    }
 }
 
 function Sensor(name, type){
