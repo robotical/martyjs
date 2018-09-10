@@ -401,7 +401,7 @@ function Marty(IP, name){
 
     this.disabledCallbacks = [];
 
-    this.get_disables = function(){
+    this._get_disables = function(){
         var evt = {
             "time": new Date(),
             "disables": []
@@ -418,7 +418,7 @@ function Marty(IP, name){
     this.motorWatchdog = function(interval=1000){
         return setInterval((function(self){
             return function(){
-                var evt = self.get_disables();
+                var evt = self._get_disables();
                 if (evt["disables"].length > 0){
                     for (var i = 0; i < self.disabledCallbacks.length; i++){
                         /* Call callbacks with event */
