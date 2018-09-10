@@ -74,8 +74,6 @@ function Marty(IP, name){
 
   // websocket stuff
   // TODO: generalise to allow other connection types - e.g. i2c for microbit
-<<<<<<< HEAD
-
   this.url = "ws://" + IP + ":81/";
 
   this.connect = function(){
